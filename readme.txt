@@ -1,1 +1,1 @@
-It's my deep learning project,learn by book named nndl by sorted.changed
+It's my deep learning project,learn by book named nndl by sorted.changed.add GPL
