@@ -9,9 +9,10 @@ class Network(object):
         self.num_layers=len(sizes)
         self.sizes=sizes
         # 随机初始化
-        # 偏置，均值为0，标准差为1的高斯分布（正态分布）
+        # 偏置，均值为0，标准差为1的高斯分布（正态分布）,randn(a,b)参数a是矩阵行数，b是列数
         self.biases=[np.random.randn(y,1) for y in sizes[1:]]
         # 权重
+        # zip将两个list中的同下标元素，两两为一个tuple，多个tuple组成一个list
         self.weights=[np.random.randn(y,x) for x,y in zip(sizes[:-1],sizes[1:])]
 
     # S型函数
@@ -43,7 +44,7 @@ class Network(object):
             mini_batches=[training_data[k:k+mini_batch_size]
                           for k in xrange(0,n,mini_batch_size)]
             for mini_batch in mini_batches:
-                # eta是学习速率
+                # eta是学习速率,对每一个mini_batch应用一次梯度下降
                 self.update_mini_batch(mini_batch,eta)
             if test_data:
                 print "Epoch {0}:{1}/{2}".format(j,self.evaluate(test_data),n_test)
@@ -55,3 +56,16 @@ class Network(object):
     # 我们应⽤⼀次梯度下降。这是通过代码 self.update_mini_batch(mini_batch, eta) 完成的，它仅
     # 仅使⽤ mini_batch 中的训练数据，根据单次梯度下降的迭代更新⽹络的权重和偏置。这是
     # update_mini_batch ⽅法的代码：
+    def update_mini_batch(self,mini_batch,eta):
+        # 得到偏置和权重的零矩阵
+        nabla_b=[np.zeros(b.shape) for b in self.biases]
+        nabla_w=[np.zeros(w.shape) for w in self.weights]
+
+        for x,y in mini_batch:
+            # 反向传播算法
+            delta_nabla_b,delta_nabla_w=self.backprop(x,y)
+            # 更新权重和偏置
+            nabla_b=[nb+dnb for nb,dnb in zip(nabla_b,delta_nabla_b)]
+            nabla_w=[nw+dnw for nw,dnw in zip(nabla_w,delta_nabla_w)]
+            self.weights=[w-(eta/len(mini_batch))*nw for w,nw in zip(self.weights,nabla_w)]
+            self.biases=[b-(eta/len(mini_batch))*nb for b,nb in zip(self.biases,nabla_b)]
