@@ -15,10 +15,6 @@ class Network(object):
         # zip将两个list中的同下标元素，两两为一个tuple，多个tuple组成一个list
         self.weights=[np.random.randn(y,x) for x,y in zip(sizes[:-1],sizes[1:])]
 
-    # S型函数
-    def sigmoid(self,z):
-        return  1.0/(1.0+np.exp(-z))
-
     # 前馈，针对每一层应用S型方程
     def feedforward(self,a):
         # zip()函数将权重和偏置转化为元组对列表
@@ -69,3 +65,10 @@ class Network(object):
             nabla_w=[nw+dnw for nw,dnw in zip(nabla_w,delta_nabla_w)]
             self.weights=[w-(eta/len(mini_batch))*nw for w,nw in zip(self.weights,nabla_w)]
             self.biases=[b-(eta/len(mini_batch))*nb for b,nb in zip(self.biases,nabla_b)]
+
+# S型函数
+def sigmoid(z):
+    return  1.0/(1.0+np.exp(-z))
+
+def sigmod_prime(z):
+    return sigmoid(z)*(1-sigmoid(z))
