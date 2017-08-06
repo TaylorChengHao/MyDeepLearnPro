@@ -66,6 +66,43 @@ class Network(object):
             self.weights=[w-(eta/len(mini_batch))*nw for w,nw in zip(self.weights,nabla_w)]
             self.biases=[b-(eta/len(mini_batch))*nb for b,nb in zip(self.biases,nabla_b)]
 
+    def backprop(self,x,y):
+        # 先创建形状一样的零矩阵
+        nable_b=[np.zeros(b.shape) for b in self.biases]
+        nable_w=[np.zeros(w.shape) for w in self.weights]
+        #feedforward
+        activation=x
+        activations=[x]
+        zs=[]
+        for b,w in zip(self.biases,self.weights):
+            # 点积，将传入的x和权重点乘加上偏置
+            # 将上面的结果传入S型函数，
+            # S型函数返回结果就是下一个神经元的输入值，
+            # 和之前的输入值（x）一起存在activations中
+            z=np.dot(w,activation)+b
+            zs.append(z)
+            activation=sigmoid(z)
+            activations.append(activation)
+        # backward pass
+        delta=self.cost_derivative(activations[-1],y)*sigmod_prime(zs[-1])
+        nable_b[-1]=delta
+        nable_w[-1]=np.dot(delta,activations[-2].transpose())
+        # Note
+        for l in range(2,self.num_layers):
+            z=zs[-l]
+            sp=sigmod_prime(z)
+            delta=np.dot(self.weights[-l+1].transpose(),delta)*sp
+            nable_b[-l]=delta
+            nable_w[-l]=np.dot(delta,activations[-l-1].transpose())
+        return (nable_b,nable_w)
+
+    def evaluate(self,test_data):
+        test_results=[(np.argmax(self.feedforward(x)),y) for(x,y) in test_data]
+        return sum(int(x==y) for (x,y) in test_results)
+
+    def cost_derivative(self,output_activations,y):
+        return (output_activations-y)
+
 # S型函数
 def sigmoid(z):
     return  1.0/(1.0+np.exp(-z))
