@@ -90,13 +90,16 @@ class Network(object):
         delta=self.cost_derivative(activations[-1],y)*sigmod_prime(zs[-1])
         nable_b[-1]=delta
         nable_w[-1]=np.dot(delta,activations[-2].transpose())
-        # Note
-        for l in range(2,self.num_layers):
+
+        # 这是为了将更新好的梯度
+        for l in xrange(2,self.num_layers):
             z=zs[-l]
             sp=sigmod_prime(z)
+            # 这里是在讲输出层误差和训练的输入值的乘积
             delta=np.dot(self.weights[-l+1].transpose(),delta)*sp
             nable_b[-l]=delta
             nable_w[-l]=np.dot(delta,activations[-l-1].transpose())
+
         return (nable_b,nable_w)
 
     def evaluate(self,test_data):
