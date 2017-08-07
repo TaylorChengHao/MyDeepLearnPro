@@ -67,23 +67,26 @@ class Network(object):
             self.biases=[b-(eta/len(mini_batch))*nb for b,nb in zip(self.biases,nabla_b)]
 
     def backprop(self,x,y):
+        # x是训练数据的输入，y是训练数据的输出
+
         # 先创建形状一样的零矩阵
         nable_b=[np.zeros(b.shape) for b in self.biases]
         nable_w=[np.zeros(w.shape) for w in self.weights]
-        #feedforward
+        #feedforward前向传播 输入层---->隐含层
         activation=x
         activations=[x]
-        zs=[]
+        zs=[] #记录输出层误差
         for b,w in zip(self.biases,self.weights):
             # 点积，将传入的x和权重点乘加上偏置
             # 将上面的结果传入S型函数，
             # S型函数返回结果就是下一个神经元的输入值，
             # 和之前的输入值（x）一起存在activations中
             z=np.dot(w,activation)+b
-            zs.append(z)
+            zs.append(z) #暂存带权输入值
             activation=sigmoid(z)
             activations.append(activation)
-        # backward pass
+
+        # backward pass 输出层误差
         delta=self.cost_derivative(activations[-1],y)*sigmod_prime(zs[-1])
         nable_b[-1]=delta
         nable_w[-1]=np.dot(delta,activations[-2].transpose())
