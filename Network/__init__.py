@@ -91,7 +91,7 @@ class Network(object):
         nable_b[-1]=delta
         nable_w[-1]=np.dot(delta,activations[-2].transpose())
 
-        # 这是为了将更新好的梯度
+        # 这是为了一层的隐藏层的误差
         for l in xrange(2,self.num_layers):
             z=zs[-l]
             sp=sigmod_prime(z)
@@ -100,6 +100,7 @@ class Network(object):
             nable_b[-l]=delta
             nable_w[-l]=np.dot(delta,activations[-l-1].transpose())
 
+        # 返回的是误差（代价）与偏置、权重的偏导数
         return (nable_b,nable_w)
 
     def evaluate(self,test_data):
