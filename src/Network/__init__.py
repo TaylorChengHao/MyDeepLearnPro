@@ -22,7 +22,7 @@ class Network(object):
         # 代入S型函数
         for b,w in zip(self.biases,self.weights):
             #将权重和输入值的点集外加偏置
-            a=self.sigmoid(np.dot(w,a)+b)
+            a=sigmoid(np.dot(w,a)+b)
         return a
 
     # 随机梯度下降
@@ -112,6 +112,7 @@ class Network(object):
 
 # S型函数
 def sigmoid(z):
+    # 防止溢出longfloat()???
     return  1.0/(1.0+np.exp(-z))
 
 def sigmod_prime(z):
