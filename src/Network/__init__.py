@@ -47,15 +47,15 @@ class Network(object):
             else:
                 print "Epoch {0} complete".format(j)
 
-    #代码如下⼯作。在每个迭代期，它⾸先随机地将训练数据打乱，然后将它分成多个适当⼤
-    # ⼩的⼩批量数据。这是⼀个简单的从训练数据的随机采样⽅法。然后对于每⼀个 mini_batch
-    # 我们应⽤⼀次梯度下降。这是通过代码 self.update_mini_batch(mini_batch, eta) 完成的，它仅
-    # 仅使⽤ mini_batch 中的训练数据，根据单次梯度下降的迭代更新⽹络的权重和偏置。这是
-    # update_mini_batch ⽅法的代码：
-    def update_mini_batch(self,mini_batch,eta):
-        # 得到偏置和权重的零矩阵
-        nabla_b=[np.zeros(b.shape) for b in self.biases]
-        nabla_w=[np.zeros(w.shape) for w in self.weights]
+    #代码如下⼯作。在每        个迭代期，它⾸先随机地将训练数据打乱，然后将它分成多个适当⼤
+        # ⼩的⼩批量数据。这是⼀个简单的从训练数据的随机采样⽅法。然后对于每⼀个 mini_batch
+        # 我们应⽤⼀次梯度下降。这是通过代码 self.update_mini_batch(mini_batch, eta) 完成的，它仅
+        # 仅使⽤ mini_batch 中的训练数据，根据单次梯度下降的迭代更新⽹络的权重和偏置。这是
+        # update_mini_batch ⽅法的代码：
+        def update_mini_batch(self, mini_batch, eta):
+            # 得到偏置和权重的零矩阵
+            nabla_b = [np.zeros(b.shape) for b in self.biases]
+            nabla_w = [np.zeros(w.shape) for w in self.weights]
 
         for x,y in mini_batch:
             # 反向传播算法
